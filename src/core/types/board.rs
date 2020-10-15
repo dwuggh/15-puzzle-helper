@@ -29,6 +29,7 @@ pub struct GameBoard {
     board: Board,
     last_move: Move,
     pub moves: Vec<Move>,
+    dist: u64,
 }
 
 
@@ -145,15 +146,19 @@ impl GameBoard {
 	    board: Board::new(rank),
             last_move: Move::None,
             moves: Vec::new(),
+	    dist: 0,
         }
     }
 
     pub fn from_vec(vec: Vec<u64>, rank: u64) -> GameBoard {
-        GameBoard {
+        let mut g = GameBoard {
 	    board: Board::from_vec(vec, rank),
             last_move: Move::None,
             moves: Vec::new(),
-        }
+	    dist: 0,
+        };
+	g.dist = g.dist_to_target();
+	g
     }
 
     // perform a move
@@ -270,8 +275,8 @@ impl Dist for GameBoard {
 
 impl Ord for GameBoard {
     fn cmp(&self, other: &Self) -> Ordering {
-	let da = &self.dist_to_target();
-	let db = other.dist_to_target();
+	let da = &self.dist;
+	let db = other.dist;
 	db.cmp(da)
     }
 }
