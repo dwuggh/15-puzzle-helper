@@ -7,6 +7,7 @@ pub trait Wrapper<T: Clone> {
     fn get_data_copy(&self) -> T {
 	self.get_data().clone()
     }
+    fn is_target(&self) -> bool;
 }
 
 pub trait Dist {

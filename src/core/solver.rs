@@ -12,7 +12,6 @@ pub struct SearchGraph<T, W>
 {
     nodes: Box<HashSet<T>>,
     priority_queue: Box<BinaryHeap<W>>,
-    target: T
 }
 
 impl<T, W> SearchGraph<T, W>
@@ -20,25 +19,24 @@ where
     T: Hash + Eq + Clone + Debug,
     W: IntoIterator<Item=W> + Wrapper<T> + Ord
 {
-    pub fn new(target: T) -> SearchGraph<T, W> {
+    pub fn new() -> SearchGraph<T, W> {
         SearchGraph {
             nodes: Box::new(HashSet::new()),
 	    priority_queue: Box::new(BinaryHeap::new()),
-	    target: target
         }
     }
 
 
     #[allow(non_snake_case)]
     fn _search_A_star(&mut self) -> W {
+	let pq: &mut BinaryHeap<W> = &mut *self.priority_queue;
+	let nodes = &mut *self.nodes;
 	loop {
 	    let timer = Instant::now();
-	    let pq: &mut BinaryHeap<W> = &mut *self.priority_queue;
-	    let nodes = &mut *self.nodes;
 	    let node = pq.pop().unwrap();
 	    let data: &T = node.get_data();
 	    println!("time 1: {:?}", timer.elapsed().as_nanos());
-	    if data.eq(&self.target) {
+	    if node.is_target() {
 		return node;
 	    }
 	    println!("time 2: {}", timer.elapsed().as_nanos());
@@ -56,7 +54,7 @@ where
 
 
 #[allow(non_snake_case)]
-pub fn search_A_star<T, W>(start: W, target: T) -> W
+pub fn search_A_star<T, W>(start: W) -> W
 where
     T: Hash + Eq + Clone + Debug,
     W: IntoIterator<Item=W> + Wrapper<T> + Ord
@@ -64,5 +62,4 @@ where
     let mut graph: SearchGraph<T, W> = SearchGraph::new(target);
     (*graph.priority_queue).borrow_mut().push(start);
     graph._search_A_star()
-    // graph._search_A_star(start)
 }

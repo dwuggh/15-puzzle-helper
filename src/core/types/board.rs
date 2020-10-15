@@ -182,6 +182,10 @@ impl GameBoard {
             }
             Move::None => {}
         }
+	// update dist
+	// there exists more effcient way: only compute the swapped site's
+	// dist difference.
+	self.dist = self.dist_to_target();
     }
 
     fn neighbors(&self) -> Vec<GameBoard> {
@@ -255,6 +259,9 @@ impl IntoIterator for GameBoard {
 impl Wrapper<Board> for GameBoard {
     fn get_data(&self) -> &Board {
 	&self.board
+    }
+    fn is_target(&self) -> bool {
+	self.dist == self.moves.len() as u64
     }
 }
 
