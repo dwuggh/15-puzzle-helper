@@ -4,8 +4,8 @@ mod core;
 
 use std::time::Instant;
 
-use crate::core::{scramble_random, search_A_star, search_reduced};
-use crate::core::types::{GameBoard, Board};
+use crate::core::{scramble_random, search_reduced};
+// use crate::core::types::{GameBoard};
 
 fn main() {
     let b = scramble_random(4);
@@ -16,5 +16,5 @@ fn main() {
     // dbg!(re);
     println!("{:?}", re);
     println!("{}", b_clone.board);
-    println!("time: {}", timer.elapsed().as_secs());
+    println!("time: {}", timer.elapsed().as_secs_f64());
 }

@@ -108,38 +108,28 @@ mod parity_check_test {
 
     #[test]
     fn real_case_rank_4_empty_site() {
-        let vec: Vec<u64> = vec![1, 12, 14, 15,
-				 9, 11, 7, 2,
-				 5, 10, 8, 3,
-				 0, 13, 4, 6];
+        let vec: Vec<u64> = vec![1, 12, 14, 15, 9, 11, 7, 2, 5, 10, 8, 3, 0, 13, 4, 6];
         assert_eq!(empty_site_parity_check(&vec, 4), true);
     }
 
     #[test]
     fn real_case_rank_4_permutation() {
-        let vec: Vec<u64> = vec![1, 12, 14, 15,
-				 9, 11, 7, 2,
-				 5, 10, 8, 3,
-				 0, 13, 4, 6];
+        let vec: Vec<u64> = vec![1, 12, 14, 15, 9, 11, 7, 2, 5, 10, 8, 3, 0, 13, 4, 6];
         assert_eq!(permutation_parity_check(&vec), true);
     }
 
     #[test]
     fn real_case_rank_4_2() {
-        let vec: Vec<u64> = vec![6, 1, 0, 15,
-				 11, 5, 13, 3,
-				 8, 9, 4, 10,
-				 2, 12, 7, 14];
+        let vec: Vec<u64> = vec![6, 1, 0, 15, 11, 5, 13, 3, 8, 9, 4, 10, 2, 12, 7, 14];
         assert_eq!(parity_check(&vec, 4), false);
     }
 
     #[test]
     fn real_case_rank_5() {
-        let vec: Vec<u64> = vec![4, 13, 5, 17, 18,
-				 11, 16, 2, 7, 19,
-				 10, 12, 23, 1, 15,
-				 15, 24, 20, 6, 8,
-				 21, 0, 3, 9, 22];
+        let vec: Vec<u64> = vec![
+            4, 13, 5, 17, 18, 11, 16, 2, 7, 19, 10, 12, 23, 1, 15, 15, 24, 20, 6, 8, 21, 0, 3, 9,
+            22,
+        ];
         assert_eq!(parity_check(&vec, 4), false);
     }
 }
