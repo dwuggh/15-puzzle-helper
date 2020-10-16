@@ -18,16 +18,16 @@ pub enum Move {
 
 #[derive(Clone, Debug, Hash)]
 pub struct Board {
-    rank: u64,
-    empty_site_pos: u64,
-    sites: Vec<u64>
+    pub rank: u64,
+    pub empty_site_pos: u64,
+    pub sites: Vec<u64>
 }
 
 
 #[derive(Clone, Debug, Hash, PartialEq, Eq)]
 pub struct GameBoard {
-    board: Board,
-    last_move: Move,
+    pub board: Board,
+    pub last_move: Move,
     pub moves: Vec<Move>,
     dist: u64,
 }
@@ -136,6 +136,39 @@ impl Board {
 	}
 	dist
     }
+    pub fn a_dist(&self) -> u64 {
+	let mut i: usize = 0;
+	let mut manhattan_dist: u64 = 0;
+	let mut hamming_dist: u64 = 0;
+	let mut other_dist : u64 = 0;
+	while i < self.sites.len() {
+	    let s = self.sites[i];
+	    let d = if s > i as u64 {
+		s - i as u64
+	    } else {
+		i as u64 - s
+	    };
+	    let row = d / self.rank;
+	    let col = d % self.rank;
+	    manhattan_dist = manhattan_dist + row + col;
+
+	    if i as u64 != s {
+		hamming_dist = hamming_dist + 1;
+	    }
+
+	    let magic_a = 2;
+	    let magic_b = 1;
+	    if s / self.rank == 0 || s % self.rank == 0 {
+		if s != i as u64 {
+		    other_dist = other_dist + magic_a;
+		    other_dist = other_dist + magic_b * (row + col);
+		}
+	    }
+
+	    i = i + 1;
+	}
+	manhattan_dist + other_dist
+    }
 }
 
 
@@ -242,6 +275,21 @@ impl GameBoard {
             self.mov(Move::Down);
         }
     }
+
+    pub fn can_reduce(&self) -> bool {
+	let board = &self.board;
+	let mut i: u64 = 0;
+	while i < board.rank {
+	    if board.sites[i as usize] != i {
+		return false;
+	    }
+	    if board.sites[(i * board.rank) as usize] != i * board.rank {
+		return false;
+	    }
+	    i = i + 1;
+	}
+	return true;
+    }
 }
 
 // traits implementation
@@ -276,7 +324,7 @@ impl Dist for Board {
 impl Dist for GameBoard {
     type D = u64;
     fn dist_to_target(&self) -> Self::D {
-	self.board.manhattan_dist() + self.moves.len() as u64
+	self.board.a_dist() + self.moves.len() as u64
     }
 }
 
