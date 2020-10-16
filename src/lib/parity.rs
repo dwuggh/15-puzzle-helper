@@ -79,10 +79,10 @@ pub fn parity_check(board: &Vec<u64>, rank: u64) -> bool {
 #[cfg(test)]
 mod parity_check_test {
 
-    // use crate::core::random_board;
-    use crate::core::parity::empty_site_parity_check;
-    use crate::core::parity::parity_check;
-    use crate::core::parity::permutation_parity_check;
+    // use crate::lib::random_board;
+    use crate::lib::parity::empty_site_parity_check;
+    use crate::lib::parity::parity_check;
+    use crate::lib::parity::permutation_parity_check;
 
     #[test]
     fn initial_state() {

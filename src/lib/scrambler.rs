@@ -1,7 +1,7 @@
 use rand::seq::SliceRandom;
 use rand::thread_rng;
 
-use crate::core::parity_check;
+pub use super::parity::parity_check;
 
 // mod types;
 use super::types::{Board, GameBoard};

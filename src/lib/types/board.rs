@@ -1,71 +1,13 @@
-use std::cmp::Ordering;
 use std::fmt;
 
-use crate::core::types::traits::{Dist, Wrapper};
+use super::traits::{Dist};
 
-// the four move types(directions), used for scramble representation
-// direction is the empty site moving direction
-#[derive(PartialEq, Eq, Clone, Debug, Hash)]
-pub enum Move {
-    Left,
-    Right,
-    Up,
-    Down,
-    None,
-}
 
-#[derive(Clone, Debug, Hash)]
+#[derive(Clone, Hash)]
 pub struct Board {
     pub rank: u64,
     pub empty_site_pos: u64,
     pub sites: Vec<u64>,
-}
-
-impl fmt::Display for Move {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self {
-            Move::Left => f.write_str("←"),
-            Move::Right => f.write_str("→"),
-            Move::Up => f.write_str("↑"),
-            Move::Down => f.write_str("↓"),
-            Move::None => f.write_str(" "),
-        }
-    }
-}
-
-impl PartialEq for Board {
-    fn eq(&self, other: &Self) -> bool {
-        self.rank == other.rank
-            && self
-                .sites
-                .iter()
-                .zip(other.sites.iter())
-                .all(|(a, b)| *a == *b)
-    }
-}
-
-impl Eq for Board {}
-
-impl fmt::Display for Board {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let mut i: usize = 0;
-        let rank = self.rank as usize;
-        while i < rank {
-            f.write_str("\n")?;
-            let mut j: usize = 0;
-            while j < rank {
-                let num: usize = (self.sites[i * rank + j] + 1) as usize;
-                if num == rank * rank {
-                    f.write_str("     ")?;
-                } else {
-                    f.write_fmt(format_args!("{:5}", num))?;
-                }
-                j = j + 1;
-            }
-            i = i + 1;
-        }
-        f.write_str("\n")
-    }
 }
 
 impl Board {
@@ -125,7 +67,9 @@ impl Board {
         }
         dist
     }
-    pub fn a_dist(&self) -> u64 {
+
+    #[inline]
+    pub fn rank_reduction_dist(&self) -> u64 {
         let mut i: usize = 0;
         let mut manhattan_dist: u64 = 0;
         let mut hamming_dist: u64 = 0;
@@ -157,5 +101,60 @@ impl Board {
             i = i + 1;
         }
         manhattan_dist + other_dist
+    }
+
+    
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let mut i: usize = 0;
+        let rank = self.rank as usize;
+        while i < rank {
+            f.write_str("\n")?;
+            let mut j: usize = 0;
+            while j < rank {
+                let num: usize = (self.sites[i * rank + j] + 1) as usize;
+                if num == rank * rank {
+                    f.write_str("     ")?;
+                } else {
+                    f.write_fmt(format_args!("{:5}", num))?;
+                }
+                j = j + 1;
+            }
+            i = i + 1;
+        }
+        f.write_str("\n")
+    }
+}
+
+
+impl PartialEq for Board {
+    fn eq(&self, other: &Self) -> bool {
+        self.rank == other.rank
+            && self
+                .sites
+                .iter()
+                .zip(other.sites.iter())
+                .all(|(a, b)| *a == *b)
+    }
+}
+
+impl Eq for Board {}
+
+impl fmt::Display for Board {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+	self.fmt(f)
+    }
+}
+
+impl fmt::Debug for Board {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+	self.fmt(f)
+    }
+}
+
+impl Dist for Board {
+    
+    type D = u64;
+    fn dist_to_target(&self) -> Self::D {
+	self.rank_reduction_dist()
     }
 }

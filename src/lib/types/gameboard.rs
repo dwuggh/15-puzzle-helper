@@ -1,6 +1,7 @@
 use std::cmp::Ordering;
 
-use super::board::{Board, Move};
+use super::mov::Move;
+use super::board::Board;
 use super::traits::{Dist, Wrapper};
 
 #[derive(Clone, Debug, Hash, PartialEq, Eq)]
@@ -153,7 +154,7 @@ impl Wrapper<Board> for GameBoard {
 impl Dist for GameBoard {
     type D = u64;
     fn dist_to_target(&self) -> Self::D {
-        self.board.a_dist() + self.moves.len() as u64
+        self.board.dist_to_target() + self.moves.len() as u64
     }
 }
 
