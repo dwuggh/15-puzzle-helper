@@ -1,8 +1,14 @@
 use super::types::{Board, GameBoard, Move, Wrapper};
+use super::parity::parity_check;
 use std::collections::BinaryHeap;
 use std::collections::HashSet;
 use std::time::Instant;
 
+
+pub enum SolveMethod {
+    Traditional_A_Star,
+    Rank_Reduction,
+}
 
 struct SearchData {
     nodes: HashSet<Board>,
@@ -10,6 +16,7 @@ struct SearchData {
 }
 
 impl SearchData {
+    #![allow(dead_code)]
     pub fn new() -> SearchData {
         SearchData {
             nodes: HashSet::new(),
@@ -18,7 +25,7 @@ impl SearchData {
     }
 
     #[allow(non_snake_case)]
-    fn _search_A_star(&mut self) -> GameBoard {
+    fn rank_reduction_search_A_star(&mut self) -> GameBoard {
         let nodes = &mut self.nodes;
         let pq = &mut self.priority_queue;
         loop {
@@ -58,8 +65,9 @@ impl SearchData {
     }
 }
 
-pub fn rank_reduction_search(start: GameBoard) -> Vec<Move> {
-    _rank_reduction_search(start, Vec::new())
+#[allow(dead_code)]
+pub fn rank_reduction_search(start: Board) -> Vec<Move> {
+    _rank_reduction_search(GameBoard::from_board(start), Vec::new())
 }
 
 fn _rank_reduction_search(start: GameBoard, mut moves: Vec<Move>) -> Vec<Move> {
@@ -70,7 +78,7 @@ fn _rank_reduction_search(start: GameBoard, mut moves: Vec<Move>) -> Vec<Move> {
     let mut data = SearchData::new();
     data.priority_queue.push(start);
 
-    let res = data._search_A_star();
+    let res = data.rank_reduction_search_A_star();
 
     println!("reduced! {:?}", res);
 
@@ -98,4 +106,17 @@ fn _rank_reduction_search(start: GameBoard, mut moves: Vec<Move>) -> Vec<Move> {
     let next: GameBoard = GameBoard::from_vec(next_sites, rank - 1);
 
     _rank_reduction_search(next, moves)
+}
+
+pub fn solve(board: Board, method: SolveMethod) -> Result<Vec<Move>, &'static str> {
+    let solvable = ! parity_check(&board);
+    if solvable {
+	match method {
+	    SolveMethod::Rank_Reduction => Ok(rank_reduction_search(board)),
+	    SolveMethod::Traditional_A_Star => Ok(rank_reduction_search(board))
+	}
+    }
+    else {
+	Err("Error: the puzzle is not solvable.")
+    }
 }

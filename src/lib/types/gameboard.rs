@@ -34,6 +34,17 @@ impl GameBoard {
         g
     }
 
+    pub fn from_board(board: Board) -> GameBoard {
+        let mut g = GameBoard {
+            board: board,
+            last_move: Move::None,
+            moves: Vec::new(),
+            dist: 0,
+        };
+        g.dist = g.dist_to_target();
+        g
+    }
+
     // perform a move
     fn mov(&mut self, m: Move) {
         self.moves.push(m.clone());

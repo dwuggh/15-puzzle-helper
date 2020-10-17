@@ -12,10 +12,12 @@ pub fn random_board(rank: u64) -> Vec<u64> {
     vec
 }
 
-pub fn scramble_random(rank: u64) -> GameBoard {
-    let mut vec: Vec<u64> = random_board(rank);
-    while parity_check(&vec, rank) {
-        vec = random_board(rank);
+pub fn scramble_random(rank: u64) -> Board {
+    loop {
+        let vec = random_board(rank);
+        let board = Board::from_vec(vec, rank);
+        if !parity_check(&board) {
+            return board;
+        }
     }
-    GameBoard::from_vec(vec, rank)
 }

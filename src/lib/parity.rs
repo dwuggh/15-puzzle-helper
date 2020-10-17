@@ -1,3 +1,5 @@
+use super::types::Board;
+
 struct Permutation<'a> {
     mark: Vec<usize>,
     perm: &'a Vec<u64>,
@@ -72,8 +74,8 @@ fn permutation_parity_check(board: &Vec<u64>) -> bool {
 /// loop parity:
 /// - odd number moves of empty site means parity
 /// - odd number of even-length loops means parity
-pub fn parity_check(board: &Vec<u64>, rank: u64) -> bool {
-    permutation_parity_check(board) ^ empty_site_parity_check(board, rank)
+pub fn parity_check(board: &Board) -> bool {
+    permutation_parity_check(&board.sites) ^ empty_site_parity_check(&board.sites, board.rank)
 }
 
 #[cfg(test)]
@@ -83,11 +85,13 @@ mod parity_check_test {
     use crate::lib::parity::empty_site_parity_check;
     use crate::lib::parity::parity_check;
     use crate::lib::parity::permutation_parity_check;
+    use crate::lib::types::Board;
 
     #[test]
     fn initial_state() {
         let vec: Vec<u64> = (0..9).collect();
-        assert_eq!(parity_check(&vec, 3), false);
+	let board = Board::from_vec(vec, 3);
+        assert_eq!(parity_check(&board), false);
     }
 
     #[test]
@@ -121,7 +125,8 @@ mod parity_check_test {
     #[test]
     fn real_case_rank_4_2() {
         let vec: Vec<u64> = vec![6, 1, 0, 15, 11, 5, 13, 3, 8, 9, 4, 10, 2, 12, 7, 14];
-        assert_eq!(parity_check(&vec, 4), false);
+	let board = Board::from_vec(vec, 4);
+        assert_eq!(parity_check(&board), false);
     }
 
     #[test]
@@ -130,6 +135,7 @@ mod parity_check_test {
             4, 13, 5, 17, 18, 11, 16, 2, 7, 19, 10, 12, 23, 1, 15, 15, 24, 20, 6, 8, 21, 0, 3, 9,
             22,
         ];
-        assert_eq!(parity_check(&vec, 4), false);
+	let board = Board::from_vec(vec, 5);
+        assert_eq!(parity_check(&board), false);
     }
 }
