@@ -95,8 +95,19 @@ fn main() {
 		    "random" => {
 			let scramble = scrambler::scramble_random(r);
 			println!("{}", scramble);
+			let timer = Instant::now();
 			let ans = solver::solve(scramble, solver::SolveMethod::Rank_Reduction);
-			println!("{:?}", ans);
+			match ans {
+			    Ok(moves) => {
+				let solve_time = timer.elapsed();
+				println!("solved! Use {} seconds", solve_time.as_secs_f64());
+				println!("{:?}", moves);
+			    }
+			    Err(error) => {
+				println!("{}", error);
+				return;
+			    }
+			}
 		    }
 		    _ => {}
 		}
