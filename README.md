@@ -5,10 +5,10 @@
  current status: under develop
  
 ## about
-  This program use a heuristic **rank reduction** A* search algorithm to find solutions. Unlike other existing programs, the "distance" to target has a heuristic metric about the status of the most outside layer, say, in a 4x4 puzzle, the most outside layer is `1 2 3 4 5 9 13`. The algorithm's goal is not to solve the whole puzzle; instead, only to reduce its rank. This appoarch is rather simple, but surprisingly effective.
- 
+This program use a heuristic **rank reduction** A* search algorithm to find solutions. Unlike other existing programs, the "distance" to target has a heuristic metric about the status of the most outside layer, say, in a 4x4 puzzle, the most outside layer is `1 2 3 4 5 9 13`. The algorithm's goal is not to solve the whole puzzle; instead, only to reduce its rank. This appoarch is rather simple, but surprisingly effective.
+
 ## usage
-```bash
+```
 fifteen-puzzle-helper 0.1.0
 dwuggh <dwuggh@gmail.com>
 solver and scramble generator for 15-puzzle
@@ -39,11 +39,12 @@ SUBCOMMANDS:
 
 - solve a random scrambled 4x4 puzzle by `fifteen-puzzle-helper solve -r 4`
 ```
-solved! Use 37.440843819 seconds
-[Up, Right, Right, Down, Down, Left, Up, Left, Down, Right, Up, Up, Right, Up, Left, Down, Left, Down, Left, Down, Right, Up, Right, Up, Left, Left, Up, Right, Right, Down, Left, Up, Right, Down, Left, Down, Right, Right, Up, Up, Left, Down, Down, Left, Up, Left, Up, Right, Right, Down, Right, Down, Left, Up, Left, Down, Right, Right, Down, Left, Up, Right, Up, Left, Down, Right, Down, Left, Left, Up, Right, Down, Right, Up, Left, Down, Right]
+solved! Use 37.974565483 seconds
+[Left, Left, Up, Right, Down, Left, Down, Right, Up, Right, Down, Down, Left, Up, Up, Right, Down, Left, Up, Up, Right, Down, Left, Left, Up, Right, Down, Down, Left, Down, Left, Up, Up, Up, Right, Down, Left, Down, Right, Up, Left, Down, Right, Right, Right, Down, Left, Up, Left, Down, Right, Right, Up, Left, Up, Left, Down, Left, Down, Right, Up, Right, Down, Right, Up, Left, Left, Down, Right, Right, Up, Up, Left, Down, Down, Right, Up, Left, Up, Right, Down, Down]
 
-   12    3    8   10
-    4   11         2
-   14    5   13   15
-    9    7    6    1
+   10   15    2    1
+    7   12   13     
+    9    3    8   11
+    6    5   14    4
 ```
+	note: The move `Up, RIght, Down, Left` represents the direction `empty site` goes.

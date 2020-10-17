@@ -94,7 +94,7 @@ fn main() {
 		match sub_scm.value_of("input").unwrap() {
 		    "random" => {
 			let scramble = scrambler::scramble_random(r);
-			println!("{}", scramble);
+			let copy = scramble.clone();
 			let timer = Instant::now();
 			let ans = solver::solve(scramble, solver::SolveMethod::Rank_Reduction);
 			match ans {
@@ -102,6 +102,7 @@ fn main() {
 				let solve_time = timer.elapsed();
 				println!("solved! Use {} seconds", solve_time.as_secs_f64());
 				println!("{:?}", moves);
+				println!("{}", copy);
 			    }
 			    Err(error) => {
 				println!("{}", error);
@@ -111,8 +112,6 @@ fn main() {
 		    }
 		    _ => {}
 		}
-		let scramble = scrambler::scramble_random(r);
-		println!("{}", scramble);
 	    }
 	    Err(_) => {
 		println!("rank must be a non-negative integer.");
